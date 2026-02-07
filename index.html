@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine Week Journey 💕</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- React & ReactDOM -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  
+  <!-- Babel for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Framer Motion -->
+  <script src="https://unpkg.com/framer-motion@10/dist/framer-motion.js"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      overflow-x: hidden;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    #root {
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.7);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    const { motion, AnimatePresence } = Motion;
+
+    const ValentineWeekApp = () => {
+      // ============================================
+      // 💘 PERSONALIZATION - EDIT THESE
+      // ============================================
+      const girlfriendName = "My Love"; // 👈 Change to her name!
+      const customWelcomeMessage = `Every love story is beautiful, but ours is my favorite. This Valentine Week, I've created something special just for you - 8 days of love, unlocking one magical moment at a time. 💕`;
+      
+      // ============================================
+      // 📅 VALENTINE WEEK SCHEDULE
+      // ============================================
+      const valentineDays = [
+        {
+          date: '2026-02-07',
+          day: 'Rose Day',
+          emoji: '🌹',
+          color: '#ff6b9d',
+          title: 'A Rose for My Love',
+          message: `Just like this rose, my love for you blooms eternal. Red for passion, pink for grace, but no color can capture how you make my heart race. You deserve a garden of roses, but for today, let this single rose represent the pure, beautiful love I hold for you. 🌹`,
+          teaser: 'A flower awaits...',
+          patienceMessage: 'Good things come to those who wait... and you, my love, are worth every second 🌹'
+        },
+        {
+          date: '2026-02-08',
+          day: 'Propose Day',
+          emoji: '💍',
+          color: '#c9a0dc',
+          title: 'My Promise to You',
+          message: `Every single day, I choose you. Not just on Propose Day, but in every sunrise and sunset, in every laugh and every quiet moment. You are my yesterday, my today, and all of my tomorrows. Will you continue this beautiful journey with me? 💍`,
+          teaser: 'Something precious is coming...',
+          patienceMessage: 'The best proposals are worth the wait... and so are you 💍'
+        },
+        {
+          date: '2026-02-09',
+          day: 'Chocolate Day',
+          emoji: '🍫',
+          color: '#8b4513',
+          title: 'Sweeter Than Chocolate',
+          message: `They say chocolate is sweet, but nothing compares to your smile. Life with you is like a box of the finest chocolates - every moment is a delightful surprise, and I want to savor each one with you forever. You make everything sweeter! 🍫`,
+          teaser: 'Sweetness awaits...',
+          patienceMessage: 'The sweetest things are worth waiting for... just like you 🍫'
+        },
+        {
+          date: '2026-02-10',
+          day: 'Teddy Day',
+          emoji: '🧸',
+          color: '#d4a373',
+          title: 'A Hug When I\'m Not There',
+          message: `This teddy is soft, cuddly, and always there for you - just like I want to be. Whenever you miss me, hold it tight and remember that my arms are always ready to embrace you. You're my comfort, my home, my everything. 🧸`,
+          teaser: 'Cuddles incoming...',
+          patienceMessage: 'The warmest hugs come to those who wait... and you deserve the warmest 🧸'
+        },
+        {
+          date: '2026-02-11',
+          day: 'Promise Day',
+          emoji: '🤝',
+          color: '#87ceeb',
+          title: 'My Vows to You',
+          message: `I promise to love you in the sunshine and in the rain, in our best moments and our most challenging ones. I promise to be your biggest supporter, your safe space, and your adventure partner. I promise to choose you, every single day, for all my days. 🤝`,
+          teaser: 'A vow awaits...',
+          patienceMessage: 'The most meaningful promises take time... and you\'re worth every promise 🤝'
+        },
+        {
+          date: '2026-02-12',
+          day: 'Hug Day',
+          emoji: '🤗',
+          color: '#ffa07a',
+          title: 'In Your Arms, I\'m Home',
+          message: `Your hugs feel like coming home after a long journey. In your arms, I find peace, warmth, and pure happiness. No words are needed - just your embrace tells me everything will be okay. Thank you for being my home. 🤗`,
+          teaser: 'Warmth is near...',
+          patienceMessage: 'The best hugs come to those who wait... and I can\'t wait to hold you 🤗'
+        },
+        {
+          date: '2026-02-13',
+          day: 'Kiss Day',
+          emoji: '💋',
+          color: '#ff1493',
+          title: 'Sealed With a Kiss',
+          message: `Every kiss with you tells a story - of laughter, passion, comfort, and pure love. Your lips on mine feel like the universe conspiring to remind me that I've found my perfect match. Here's to a lifetime of stolen kisses and magical moments. 💋`,
+          teaser: 'Love is just one day away...',
+          patienceMessage: 'The sweetest kisses are worth the wait... and yours are the sweetest 💋'
+        },
+        {
+          date: '2026-02-14',
+          day: 'Valentine\'s Day',
+          emoji: '❤️',
+          color: '#ff0000',
+          title: 'You Are My Forever Valentine',
+          message: `We've reached the grand finale - Valentine's Day! But honestly, every day with you feels like Valentine's Day. You are my heart, my soul, my everything. Thank you for being you, for loving me, and for making every single day an adventure. I love you more than words can express. Happy Valentine's Day, my forever love! ❤️💕💖`,
+          teaser: 'The grand finale awaits...',
+          patienceMessage: 'The best is saved for last... and you, my love, are the best ❤️'
+        }
+      ];
+
+      // ============================================
+      // 🎯 STATE MANAGEMENT
+      // ============================================
+      const [currentPage, setCurrentPage] = useState('welcome'); // 'welcome' or day index (0-7)
+      const [currentTime, setCurrentTime] = useState(new Date());
+
+      // ============================================
+      // ⏰ REAL-TIME COUNTDOWN TIMER
+      // ============================================
+      useEffect(() => {
+        const timer = setInterval(() => {
+          setCurrentTime(new Date());
+        }, 1000);
+        return () => clearInterval(timer);
+      }, []);
+
+      // ============================================
+      // 🔓 UNLOCK LOGIC
+      // ============================================
+      const isUnlocked = (targetDate) => {
+        const target = new Date(targetDate);
+        const today = new Date();
+        
+        target.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+        
+        return today >= target;
+      };
+
+      const isToday = (targetDate) => {
+        const target = new Date(targetDate);
+        const today = new Date();
+        
+        return (
+          target.getDate() === today.getDate() &&
+          target.getMonth() === today.getMonth() &&
+          target.getFullYear() === today.getFullYear()
+        );
+      };
+
+      // ============================================
+      // ⏳ COUNTDOWN CALCULATOR
+      // ============================================
+      const getCountdown = (targetDate) => {
+        const target = new Date(targetDate);
+        target.setHours(0, 0, 0, 0);
+        
+        const now = new Date();
+        const diff = target - now;
+        
+        if (diff <= 0) return null;
+        
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        return { hours, minutes, seconds };
+      };
+
+      // ============================================
+      // 📊 PROGRESS CALCULATION
+      // ============================================
+      const getProgress = () => {
+        const unlockedCount = valentineDays.filter(day => isUnlocked(day.date)).length;
+        return {
+          current: unlockedCount,
+          total: valentineDays.length,
+          percentage: (unlockedCount / valentineDays.length) * 100
+        };
+      };
+
+      // ============================================
+      // 🎯 NAVIGATION HANDLERS
+      // ============================================
+      const goToDay = (dayIndex) => {
+        setCurrentPage(dayIndex);
+      };
+
+      const goToNextDay = () => {
+        const currentDayIndex = typeof currentPage === 'number' ? currentPage : -1;
+        const nextIndex = currentDayIndex + 1;
+        
+        if (nextIndex < valentineDays.length) {
+          setCurrentPage(nextIndex);
+        }
+      };
+
+      const goToWelcome = () => {
+        setCurrentPage('welcome');
+      };
+
+      const progress = getProgress();
+
+      // ============================================
+      // 🎨 STYLES
+      // ============================================
+      const styles = {
+        container: {
+          minHeight: '100vh',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: 'white',
+          fontFamily: "'Poppins', sans-serif",
+          position: 'relative',
+          paddingBottom: '180px', // Space for bottom cards
+        },
+        
+        // WELCOME PAGE STYLES
+        welcomeContainer: {
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '2rem',
+          textAlign: 'center',
+        },
+        welcomeTitle: {
+          fontSize: 'clamp(2.5rem, 6vw, 4rem)',
+          fontWeight: '700',
+          marginBottom: '1rem',
+          textShadow: '3px 3px 6px rgba(0,0,0,0.3)',
+        },
+        welcomeSubtitle: {
+          fontSize: 'clamp(1.2rem, 3vw, 2rem)',
+          fontWeight: '300',
+          marginBottom: '2rem',
+          opacity: 0.9,
+        },
+        welcomeMessage: {
+          maxWidth: '700px',
+          fontSize: 'clamp(1rem, 2vw, 1.3rem)',
+          lineHeight: '1.8',
+          marginBottom: '3rem',
+          padding: '2rem',
+          background: 'rgba(255,255,255,0.1)',
+          borderRadius: '20px',
+          backdropFilter: 'blur(10px)',
+        },
+        letsGoButton: {
+          padding: '1.2rem 3rem',
+          fontSize: '1.3rem',
+          fontWeight: '600',
+          background: 'linear-gradient(135deg, #ff6b9d, #ff1493)',
+          border: 'none',
+          borderRadius: '50px',
+          color: 'white',
+          cursor: 'pointer',
+          boxShadow: '0 10px 30px rgba(255,20,147,0.4)',
+          transition: 'all 0.3s ease',
+        },
+
+        // DAY PAGE STYLES
+        dayPageContainer: {
+          minHeight: 'calc(100vh - 180px)',
+          padding: '2rem',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        dayHeader: {
+          textAlign: 'center',
+          marginBottom: '2rem',
+        },
+        dayEmoji: {
+          fontSize: 'clamp(4rem, 15vw, 8rem)',
+          marginBottom: '1rem',
+          display: 'block',
+        },
+        dayTitle: {
+          fontSize: 'clamp(2rem, 5vw, 3rem)',
+          fontWeight: '700',
+          marginBottom: '0.5rem',
+        },
+        daySubtitle: {
+          fontSize: 'clamp(1rem, 3vw, 1.5rem)',
+          opacity: 0.9,
+          fontWeight: '300',
+        },
+        dayContent: {
+          maxWidth: '800px',
+          width: '100%',
+          background: 'rgba(255,255,255,0.15)',
+          backdropFilter: 'blur(10px)',
+          borderRadius: '30px',
+          padding: 'clamp(1.5rem, 4vw, 3rem)',
+          marginBottom: '2rem',
+          border: '2px solid rgba(255,255,255,0.3)',
+        },
+        dayMessage: {
+          fontSize: 'clamp(1rem, 2.5vw, 1.3rem)',
+          lineHeight: '1.8',
+          textAlign: 'center',
+        },
+        navigationButtons: {
+          display: 'flex',
+          gap: '1rem',
+          marginTop: '2rem',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+        },
+        navButton: {
+          padding: '0.8rem 2rem',
+          fontSize: '1rem',
+          fontWeight: '600',
+          background: 'rgba(255,255,255,0.2)',
+          border: '2px solid rgba(255,255,255,0.3)',
+          borderRadius: '25px',
+          color: 'white',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+        },
+        nextButton: {
+          background: 'linear-gradient(135deg, #ff6b9d, #ff1493)',
+          border: 'none',
+        },
+
+        // LOCKED DAY STYLES
+        lockedContainer: {
+          textAlign: 'center',
+        },
+        lockIcon: {
+          fontSize: 'clamp(3rem, 10vw, 5rem)',
+          marginBottom: '1rem',
+        },
+        patienceMessage: {
+          fontSize: 'clamp(1.1rem, 3vw, 1.5rem)',
+          marginBottom: '2rem',
+          fontStyle: 'italic',
+        },
+        countdown: {
+          background: 'rgba(0,0,0,0.3)',
+          borderRadius: '20px',
+          padding: '2rem',
+          marginTop: '2rem',
+        },
+        countdownLabel: {
+          fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
+          marginBottom: '1rem',
+          opacity: 0.9,
+        },
+        countdownNumbers: {
+          fontSize: 'clamp(2rem, 6vw, 3rem)',
+          fontWeight: '700',
+          letterSpacing: '3px',
+        },
+
+        // BOTTOM SCROLL CARDS
+        bottomCardsContainer: {
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          background: 'rgba(0,0,0,0.3)',
+          backdropFilter: 'blur(10px)',
+          borderTop: '2px solid rgba(255,255,255,0.2)',
+          padding: '1rem',
+          zIndex: 100,
+        },
+        cardsScrollWrapper: {
+          display: 'flex',
+          gap: '1rem',
+          overflowX: 'auto',
+          overflowY: 'hidden',
+          padding: '0.5rem',
+          scrollbarWidth: 'thin',
+        },
+        miniCard: {
+          minWidth: '120px',
+          height: '140px',
+          borderRadius: '15px',
+          padding: '1rem',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          border: '2px solid rgba(255,255,255,0.3)',
+          position: 'relative',
+        },
+        miniCardLocked: {
+          opacity: 0.5,
+          filter: 'grayscale(0.5)',
+        },
+        miniCardActive: {
+          border: '3px solid white',
+          transform: 'scale(1.05)',
+        },
+        miniEmoji: {
+          fontSize: '2.5rem',
+          marginBottom: '0.5rem',
+        },
+        miniTitle: {
+          fontSize: '0.8rem',
+          fontWeight: '600',
+          textAlign: 'center',
+        },
+        miniLockBadge: {
+          position: 'absolute',
+          top: '5px',
+          right: '5px',
+          fontSize: '1rem',
+        },
+      };
+
+      // ============================================
+      // 🎨 RENDER WELCOME PAGE
+      // ============================================
+      const renderWelcomePage = () => (
+        <motion.div
+          style={styles.welcomeContainer}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.h1
+            style={styles.welcomeTitle}
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            Welcome, {girlfriendName} 💕
+          </motion.h1>
+          
+          <motion.p
+            style={styles.welcomeSubtitle}
+            initial={{ y: -30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            A Journey of Love Awaits
+          </motion.p>
+          
+          <motion.div
+            style={styles.welcomeMessage}
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.6 }}
+          >
+            {customWelcomeMessage}
+          </motion.div>
+          
+          <motion.button
+            style={styles.letsGoButton}
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => goToDay(0)}
+            onMouseOver={(e) => {
+              e.target.style.transform = 'translateY(-5px)';
+              e.target.style.boxShadow = '0 15px 40px rgba(255,20,147,0.6)';
+            }}
+            onMouseOut={(e) => {
+              e.target.style.transform = 'translateY(0)';
+              e.target.style.boxShadow = '0 10px 30px rgba(255,20,147,0.4)';
+            }}
+          >
+            Let's Go! 💖
+          </motion.button>
+
+          {/* Floating Hearts */}
+          {[...Array(15)].map((_, i) => (
+            <motion.div
+              key={i}
+              style={{
+                position: 'absolute',
+                fontSize: '2rem',
+                opacity: 0.3,
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                pointerEvents: 'none',
+              }}
+              animate={{
+                y: [0, -30, 0],
+                x: [0, Math.random() * 20 - 10, 0],
+                opacity: [0.2, 0.5, 0.2],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 3 + Math.random() * 2,
+                delay: Math.random() * 2,
+              }}
+            >
+              💕
+            </motion.div>
+          ))}
+        </motion.div>
+      );
+
+      // ============================================
+      // 🎨 RENDER DAY PAGE
+      // ============================================
+      const renderDayPage = (dayIndex) => {
+        const day = valentineDays[dayIndex];
+        const unlocked = isUnlocked(day.date);
+        const countdown = unlocked ? null : getCountdown(day.date);
+        const isLastDay = dayIndex === valentineDays.length - 1;
+
+        return (
+          <motion.div
+            style={{
+              ...styles.dayPageContainer,
+              background: `linear-gradient(135deg, ${day.color}33, ${day.color}66)`,
+            }}
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -100 }}
+          >
+            {unlocked ? (
+              // UNLOCKED DAY CONTENT
+              <>
+                <div style={styles.dayHeader}>
+                  <motion.span
+                    style={styles.dayEmoji}
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ repeat: Infinity, duration: 3 }}
+                  >
+                    {day.emoji}
+                  </motion.span>
+                  <h1 style={styles.dayTitle}>{day.title}</h1>
+                  <p style={styles.daySubtitle}>{day.day}</p>
+                </div>
+
+                <motion.div
+                  style={styles.dayContent}
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <p style={styles.dayMessage}>{day.message}</p>
+                </motion.div>
+
+                <div style={styles.navigationButtons}>
+                  <button
+                    style={styles.navButton}
+                    onClick={goToWelcome}
+                    onMouseOver={(e) => e.target.style.background = 'rgba(255,255,255,0.3)'}
+                    onMouseOut={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
+                  >
+                    🏠 Home
+                  </button>
+                  
+                  {!isLastDay && (
+                    <button
+                      style={{...styles.navButton, ...styles.nextButton}}
+                      onClick={goToNextDay}
+                      onMouseOver={(e) => e.target.style.transform = 'scale(1.05)'}
+                      onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
+                    >
+                      Next Day 💕
+                    </button>
+                  )}
+                </div>
+              </>
+            ) : (
+              // LOCKED DAY CONTENT
+              <motion.div
+                style={styles.lockedContainer}
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+              >
+                <motion.div
+                  style={styles.lockIcon}
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ repeat: Infinity, duration: 2 }}
+                >
+                  🔒
+                </motion.div>
+
+                <div style={styles.dayHeader}>
+                  <span style={styles.dayEmoji}>{day.emoji}</span>
+                  <h1 style={styles.dayTitle}>{day.day}</h1>
+                </div>
+
+                <motion.div
+                  style={styles.dayContent}
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <p style={styles.patienceMessage}>
+                    {day.patienceMessage}
+                  </p>
+
+                  {countdown && (
+                    <div style={styles.countdown}>
+                      <div style={styles.countdownLabel}>
+                        Unlocks in:
+                      </div>
+                      <div style={styles.countdownNumbers}>
+                        {String(countdown.hours).padStart(2, '0')} :{' '}
+                        {String(countdown.minutes).padStart(2, '0')} :{' '}
+                        {String(countdown.seconds).padStart(2, '0')}
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+
+                <div style={styles.navigationButtons}>
+                  <button
+                    style={styles.navButton}
+                    onClick={goToWelcome}
+                    onMouseOver={(e) => e.target.style.background = 'rgba(255,255,255,0.3)'}
+                    onMouseOut={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
+                  >
+                    🏠 Home
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </motion.div>
+        );
+      };
+
+      // ============================================
+      // 🎨 RENDER BOTTOM SCROLL CARDS
+      // ============================================
+      const renderBottomCards = () => (
+        <div style={styles.bottomCardsContainer}>
+          <div style={styles.cardsScrollWrapper}>
+            {valentineDays.map((day, index) => {
+              const unlocked = isUnlocked(day.date);
+              const isActive = currentPage === index;
+
+              return (
+                <motion.div
+                  key={index}
+                  style={{
+                    ...styles.miniCard,
+                    background: `linear-gradient(135deg, ${day.color}aa, ${day.color}dd)`,
+                    ...(unlocked ? {} : styles.miniCardLocked),
+                    ...(isActive ? styles.miniCardActive : {}),
+                  }}
+                  whileHover={unlocked ? { scale: 1.05 } : {}}
+                  whileTap={unlocked ? { scale: 0.95 } : {}}
+                  onClick={() => unlocked && goToDay(index)}
+                >
+                  {!unlocked && (
+                    <span style={styles.miniLockBadge}>🔒</span>
+                  )}
+                  <div style={styles.miniEmoji}>{day.emoji}</div>
+                  <div style={styles.miniTitle}>{day.day}</div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      );
+
+      // ============================================
+      // 🎨 MAIN RENDER
+      // ============================================
+      return (
+        <div style={styles.container}>
+          <AnimatePresence mode="wait">
+            {currentPage === 'welcome' ? (
+              renderWelcomePage()
+            ) : (
+              renderDayPage(currentPage)
+            )}
+          </AnimatePresence>
+
+          {/* Bottom Scroll Cards (Hidden on Welcome Page) */}
+          {currentPage !== 'welcome' && renderBottomCards()}
+        </div>
+      );
+    };
+
+    // ============================================
+    // 🚀 RENDER APP
+    // ============================================
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<ValentineWeekApp />);
+  </script>
+</body>
+</html>
